@@ -2,7 +2,7 @@ clc;
 clear;
 close all;
 
-mapSize = 50;
+mapSize = 5;
 
 
 
@@ -32,32 +32,29 @@ end
 
 function nextGen = process(matrix, mapSize)
     C = matrix ;
-    outputM = matrix;
     for i=1:mapSize
         for j=1:mapSize
-            if matrix(i,j) == 0 && numberAlive(i,j,C) == 3
-                outputM(i,j) = 1; % Cell becomes alive
+            if matrix(i,j) == 1 & numberAlive(i,j,C) == 3
+                nextGen(i,j) = 0; % Cell becomes alive
             end
 
-            if matrix(i,j) == 1 & (numberAlive(i,j,C) > 3 || numberAlive(i,j,C) <2)
-                outputM(i,j) = 0; % Cell dies
+            if matrix(i,j) == 0 & (numberAlive(i,j,C) > 3 || numberAlive(i,j,C) <2)
+                nextGen(i,j) = 1; % Cell dies
             end
         end
     end
-    nextGen = outputM; % Update the next generation matrix
 end
 
 
 
-A = RandomZO(mapSize);
+A = Random(mapSize);
 
 
 % Display the generated map as an image
 
 figure;
 h = imagesc(A);
-colormap(flipud(gray));
-clim([0,1]);
+colormap(gray);
 axis equal tight;
 title('Random Binary Map');
 
@@ -66,7 +63,7 @@ while true
     A = process(A, mapSize);
     set(h,'CData',A);
     drawnow;
-    pause(.5);
+    pause(1);
 end
   
     
